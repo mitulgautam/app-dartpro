@@ -10,6 +10,7 @@ import 'package:dartcard/screens/business_logic/bloc.dart';
 import 'package:dartcard/screens/create_game/create_game_screen.dart';
 import 'package:dartcard/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class SelectPlayersScreen extends StatefulWidget {
   const SelectPlayersScreen({super.key});
@@ -25,11 +26,21 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
   TextEditingController userNameController = TextEditingController();
   int selectedValue = 1;
   List<int> selectedPlayers = [];
+  bool isLoading = false;
 
   loadData() async {
+    isLoading = true;
     BaseResponseModel baseResponseModel =
         await ApiService.fetchData(ApiConst.playersEndPoint);
     dataModel = PlayersDataModel.fromJson(json.decode(baseResponseModel.text));
+    isLoading = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
   }
 
   @override
@@ -62,18 +73,16 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height / 1.5,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.all(32.0),
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(8.0)),
-              padding: const EdgeInsets.all(16.0),
-              child: FutureBuilder(
-                future: loadData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return (dataModel.players ?? []).isNotEmpty
+                height: MediaQuery.of(context).size.height / 1.5,
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.all(32.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(8.0)),
+                padding: const EdgeInsets.all(16.0),
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : (dataModel.players ?? []).isNotEmpty
                         ? ListView.separated(
                             itemBuilder: (context, index) {
                               Player data = dataModel.players![index];
@@ -114,13 +123,7 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
                                 .textTheme
                                 .titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w500),
-                          ));
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
-            ),
+                          ))),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -352,9 +355,15 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
                                               .contains(player.id)) ??
                                       [])
                                   .toList());
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateGameScreen(players: data)));
+                          if (selectedPlayers.length % 2 == 0) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CreateGameScreen(players: data)));
+                          } else {
+                            showSimpleNotification(
+                                Text('Please select even no. of players'),
+                                background: Colors.red);
+                          }
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -373,7 +382,7 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
                 ],
               ),
             )
-          ]),
+          ])
         ]));
   }
 }

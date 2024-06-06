@@ -21,7 +21,7 @@ class CreateGameScreen extends StatefulWidget {
 class _CreateGameScreenState extends State<CreateGameScreen> {
   int roundsCount = 5;
 
-  int noOfChances = 4;
+  int noOfChances = 3;
 
   List<TableRow> tableRows = [];
   List<Widget> tableTeam = [];
@@ -52,7 +52,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
               fontSize: 16.0,
               color: (widget.players[0].teamPlayersAttributes![j].isCaptain ??
                       false)
-                  ? Colors.red
+                  ? primaryColor
                   : Colors.black),
         ),
         Text(
@@ -63,7 +63,7 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
               fontSize: 16.0,
               color: (widget.players[1].teamPlayersAttributes![j].isCaptain ??
                       false)
-                  ? Colors.red
+                  ? secondaryColor
                   : Colors.black),
         ),
       ]));
@@ -85,123 +85,72 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
               color: secondaryColor),
         ],
       ),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.all(32.0),
-            decoration: BoxDecoration(
-                color: tertiaryColor, borderRadius: BorderRadius.circular(8.0)),
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Text(
-                  widget.players.length == 2 ? 'SOLO GAME' : 'TEAM GAME',
-                  style: Theme.of(context).textTheme.titleLarge),
-            ),
-          ),
-          Container(
+      SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
               width: MediaQuery.of(context).size.width,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
+              margin: const EdgeInsets.all(32.0),
               decoration: BoxDecoration(
                   color: tertiaryColor,
                   borderRadius: BorderRadius.circular(8.0)),
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Rounds',
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            padding: EdgeInsets.all(24.0),
-                            child: Text('$roundsCount',
-                                style: Theme.of(context).textTheme.titleLarge),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    roundsCount += 1;
-                                  });
-                                },
-                                child: Container(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  color: primaryColor,
-                                  child: const Icon(Icons.keyboard_arrow_up,
-                                      color: Colors.white),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (roundsCount > 0) {
-                                      roundsCount -= 1;
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  color: secondaryColor,
-                                  child: const Icon(Icons.keyboard_arrow_down,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('No. Of Chances',
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            padding: EdgeInsets.all(24.0),
-                            child: Text('$noOfChances',
-                                style: Theme.of(context).textTheme.titleLarge),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    noOfChances += 1;
-                                  });
-                                },
-                                child: Container(
-                                  width: 40.0,
-                                  height: 40.0,
-                                  color: primaryColor,
-                                  child: const Icon(Icons.keyboard_arrow_up,
-                                      color: Colors.white),
-                                ),
-                              ),
-                              GestureDetector(
+              child: Center(
+                child: Text(
+                    widget.players[0].teamPlayersAttributes?.length == 1
+                        ? 'SOLO GAME'
+                        : 'TEAM GAME',
+                    style: Theme.of(context).textTheme.titleLarge),
+              ),
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
+                decoration: BoxDecoration(
+                    color: tertiaryColor,
+                    borderRadius: BorderRadius.circular(8.0)),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Rounds',
+                            style: Theme.of(context).textTheme.titleLarge),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              padding: EdgeInsets.all(24.0),
+                              child: Text('$roundsCount',
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Column(
+                              children: [
+                                GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if (noOfChances > 0) {
-                                        noOfChances -= 1;
+                                      roundsCount += 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    color: primaryColor,
+                                    child: const Icon(Icons.keyboard_arrow_up,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (roundsCount > 0) {
+                                        roundsCount -= 1;
                                       }
                                     });
                                   },
@@ -211,60 +160,131 @@ class _CreateGameScreenState extends State<CreateGameScreen> {
                                     color: secondaryColor,
                                     child: const Icon(Icons.keyboard_arrow_down,
                                         color: Colors.white),
-                                  )),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-          Container(
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('No. Of Chances',
+                            style: Theme.of(context).textTheme.titleLarge),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              padding: EdgeInsets.all(24.0),
+                              child: Text('$noOfChances',
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      noOfChances += 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    color: primaryColor,
+                                    child: const Icon(Icons.keyboard_arrow_up,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (noOfChances > 0) {
+                                          noOfChances -= 1;
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      color: secondaryColor,
+                                      child: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colors.white),
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 4,
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 32.0, vertical: 16.0),
+                decoration: BoxDecoration(
+                    color: tertiaryColor,
+                    borderRadius: BorderRadius.circular(8.0)),
+                padding: const EdgeInsets.all(16.0),
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return tableTeam[index];
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    itemCount: tableTeam.length)),
+            SizedBox(height: 24.0),
+            Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height/4,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-              decoration: BoxDecoration(
-                  color: tertiaryColor,
-                  borderRadius: BorderRadius.circular(8.0)),
-              padding: const EdgeInsets.all(16.0),
-              child: ListView.separated(
-                shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return tableTeam[index];
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider();
-                  },
-                  itemCount: tableTeam.length)),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(32.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                BaseResponseModel dataModel = await ApiService.postData(
-                    ApiConst.gamesEndPostPoint,
-                    CreateGameDataModel(
-                            game: Game(
-                                chancePerRound: noOfChances,
-                                gameType: widget.players.length == 2
-                                    ? 'single'
-                                    : 'team',
-                                rounds: roundsCount,
-                                teamsAttributes: widget.players))
-                        .toJson());
-                CreateGameResponseDataModel response =
-                    CreateGameResponseDataModel.fromJson(
-                        json.decode(dataModel.text));
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        Scorer(gameId: response.data?.id ?? 0)));
-              },
-              child: Text('CREATE GAME'),
+              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              height: 48.0,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0))),
+                onPressed: () async {
+                  BaseResponseModel dataModel = await ApiService.postData(
+                      ApiConst.gamesEndPostPoint,
+                      CreateGameDataModel(
+                              game: Game(
+                                  chancePerRound: noOfChances,
+                                  gameType: widget.players.length == 2
+                                      ? 'single'
+                                      : 'team',
+                                  rounds: roundsCount,
+                                  teamsAttributes: widget.players))
+                          .toJson());
+                  CreateGameResponseDataModel response =
+                      CreateGameResponseDataModel.fromJson(
+                          json.decode(dataModel.text));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          Scorer(gameId: response.data?.id ?? 0)));
+                },
+                child: Text(
+                  'CREATE GAME',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: Colors.white),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       )
     ]));
   }

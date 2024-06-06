@@ -51,7 +51,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                   widget.scoreResponseDataModel =
                       ScoreResponseDataModel.fromJson(
                           json.decode(model.text));
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(widget.scoreResponseDataModel);
                   setState(() {});
                 },
                 child: Container(

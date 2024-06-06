@@ -1,5 +1,4 @@
 class GameDetailDataModel {
-  String? message;
   int? id;
   String? gameType;
   int? rounds;
@@ -14,20 +13,20 @@ class GameDetailDataModel {
   String? currentPlayerName;
 
   GameDetailDataModel(
-      {this.message,
-        this.id,
-        this.gameType,
-        this.rounds,
-        this.chancePerRound,
-        this.topScorerScore,
-        this.createdAt,
-        this.xname,
-        this.teams,
-        this.currentPlayerId,
-        this.currentTeamId,this.currentRoundId,this.currentPlayerName});
+      {this.id,
+      this.gameType,
+      this.rounds,
+      this.chancePerRound,
+      this.topScorerScore,
+      this.createdAt,
+      this.xname,
+      this.teams,
+      this.currentPlayerId,
+      this.currentTeamId,
+      this.currentRoundId,
+      this.currentPlayerName});
 
   GameDetailDataModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
     id = json['id'];
     gameType = json['game_type'];
     rounds = json['rounds'];
@@ -38,34 +37,31 @@ class GameDetailDataModel {
     if (json['teams'] != null) {
       teams = <Teams>[];
       json['teams'].forEach((v) {
-        teams!.add(new Teams.fromJson(v));
+        teams!.add(Teams.fromJson(v));
       });
     }
     currentPlayerId = json['current_player_id'];
     currentTeamId = json['current_team_id'];
     currentRoundId = json['current_round_id'];
     currentPlayerName = json['current_player_name'];
-
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    data['id'] = this.id;
-    data['game_type'] = this.gameType;
-    data['rounds'] = this.rounds;
-    data['chance_per_round'] = this.chancePerRound;
-    data['top_scorer_score'] = this.topScorerScore;
-    data['created_at'] = this.createdAt;
-    data['xname'] = this.xname;
-    if (this.teams != null) {
-      data['teams'] = this.teams!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['game_type'] = gameType;
+    data['rounds'] = rounds;
+    data['chance_per_round'] = chancePerRound;
+    data['top_scorer_score'] = topScorerScore;
+    data['created_at'] = createdAt;
+    data['xname'] = xname;
+    if (teams != null) {
+      data['teams'] = teams!.map((v) => v.toJson()).toList();
     }
-    data['current_player_id'] = this.currentPlayerId;
-    data['current_team_id'] = this.currentTeamId;
-    data['current_round_id'] = this.currentRoundId;
-    data['current_player_name'] = this.currentPlayerName;
-
+    data['current_player_id'] = currentPlayerId;
+    data['current_team_id'] = currentTeamId;
+    data['current_round_id'] = currentRoundId;
+    data['current_player_name'] = currentPlayerName;
     return data;
   }
 }
@@ -75,22 +71,57 @@ class Teams {
   String? name;
   int? score;
   bool? isWinner;
+  List<Players>? players;
 
-  Teams({this.id, this.name, this.score, this.isWinner});
+  Teams({this.id, this.name, this.score, this.isWinner, this.players});
 
   Teams.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     score = json['score'];
     isWinner = json['is_winner'];
+    if (json['players'] != null) {
+      players = <Players>[];
+      json['players'].forEach((v) {
+        players!.add(Players.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['score'] = this.score;
-    data['is_winner'] = this.isWinner;
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    data['score'] = score;
+    data['is_winner'] = isWinner;
+    if (players != null) {
+      data['players'] = players!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Players {
+  int? id;
+  int? score;
+  String? name;
+  List<dynamic>? lastScores;
+
+  Players({this.id, this.score, this.name, this.lastScores});
+
+  Players.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    score = json['score'];
+    name = json['name'];
+    lastScores = json['last_scores'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['score'] = score;
+    data['name'] = name;
+    data['last_scores'] = lastScores;
     return data;
   }
 }

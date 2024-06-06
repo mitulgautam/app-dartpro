@@ -4,5 +4,5 @@ class ApiConst {
   static const String playersPostEndPoint = '$baseURL/players';
   static const String gamesEndPoint = '$baseURL/games.json';
   static const String gamesEndPostPoint = '$baseURL/games';
-  static const String scoreEndPostPoint = '$baseURL/score';
+  static const String scoreEndPostPoint = '$baseURL/score.json';
 }

@@ -23,6 +23,7 @@ class Data {
   int? currentRound;
   String? nextPlayerName;
 
+
   Data({this.nextPlayerId, this.nextTeamId, this.teams, this.currentRound});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -55,40 +56,59 @@ class Data {
 class Teams {
   int? id;
   String? name;
-  int? gameId;
   int? score;
   bool? isWinner;
-  String? createdAt;
-  String? updatedAt;
+  List<Players>? players;
 
-  Teams(
-      {this.id,
-        this.name,
-        this.gameId,
-        this.score,
-        this.isWinner,
-        this.createdAt,
-        this.updatedAt});
+  Teams({this.id, this.name, this.score, this.isWinner, this.players});
 
   Teams.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    gameId = json['game_id'];
     score = json['score'];
     isWinner = json['is_winner'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    if (json['players'] != null) {
+      players = <Players>[];
+      json['players'].forEach((v) {
+        players!.add(new Players.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
-    data['game_id'] = this.gameId;
     data['score'] = this.score;
     data['is_winner'] = this.isWinner;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    if (this.players != null) {
+      data['players'] = this.players!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Players {
+  int? id;
+  int? score;
+  String? name;
+  List<int>? lastScores;
+
+  Players({this.id, this.score, this.name, this.lastScores});
+
+  Players.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    score = json['score'];
+    name = json['name'];
+    lastScores = json['last_scores'].cast<int>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['score'] = this.score;
+    data['name'] = this.name;
+    data['last_scores'] = this.lastScores;
     return data;
   }
 }
